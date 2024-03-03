@@ -3,6 +3,7 @@ use std::fs;
 use std::io::{self, Write};
 
 mod lexer;
+mod parser;
 
 /// Enter the REPL
 fn run_repl() {
@@ -24,9 +25,14 @@ fn run_repl() {
 /// Scan the input program
 fn run(program: &String) {
     let mut scanner: lexer::Lexer = lexer::Lexer::init(program);
-    match scanner.scan() {
-        Ok(()) => println!("{:?}", scanner.tokens),
-        Err(e) => eprintln!("{}", e),
+    if let Err(e) = scanner.scan() {
+        eprintln!("Error while scanning: {}", e);
+    }
+    println!("{:?}\n\n", scanner.tokens);
+    let mut parser: parser::Parser = parser::Parser::init(scanner.tokens);
+    match parser.parse() {
+        Ok(expr) => println!("{:?}", expr),
+        Err(e) => eprintln!("Error while parsing: {}", e),
     }
 }
 

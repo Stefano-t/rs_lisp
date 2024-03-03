@@ -3,7 +3,7 @@ pub type Result<T> = std::result::Result<T, ParsingError>;
 
 #[derive(Debug, Clone)]
 /// Error while the parsing phase
-pub struct ParsingError(String);
+pub struct ParsingError(pub String);
 
 impl std::fmt::Display for ParsingError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -11,7 +11,7 @@ impl std::fmt::Display for ParsingError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 /// Token produced by the tokenizer
 pub(crate) enum Token {
     OpenParen,
@@ -21,6 +21,7 @@ pub(crate) enum Token {
     Comma,
     String(String),
     Number(f64),
+    // @TODO: support integer.
     End,
 }
 
